@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "com.sammy.tool_sharpening.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "tool_sharpening.refmap.json",
+  "mixins": [
+    "RemoveSharpnessFromLootMixin",
+    "RemoveSharpnessFromTradesMixin",
+    "PreventSharpnessFromBeingAppliedMixin"
+  ],
+  "minVersion": "0.8"
+}

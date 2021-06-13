@@ -1,0 +1,132 @@
+buildscript {
+    repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
+        jcenter()
+        mavenCentral()
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '4.1.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+apply plugin: 'org.spongepowered.mixin'
+
+mixin {
+    add sourceSets.main, "tool_sharpening.mixins.json"
+}
+version = "${project.minecraft}-${project.modVersion}"
+group = 'com.sammy.tool_sharpening'
+archivesBaseName = project.modId
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+sourceSets {
+    main.resources.srcDirs += 'src/main/generated_resources'
+}
+minecraft {
+    mappings channel: 'snapshot', version: '20201028-1.16.3'
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            arg "-mixin.config="+archivesBaseName+".mixins.json"
+
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                toolsharpening {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            property 'mixin.env.disableRefMap', 'true'
+            workingDirectory project.file('run')
+            arg "-mixin.config="+archivesBaseName+".mixins.json"
+
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                toolsharpening {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', ''
+
+            property 'forge.logging.console.level', 'debug'
+
+            args '--mod', 'toolsharpening', '--all', '--output', file('src/main/generated_resources/'), '--existing', file('src/main/resources/')
+
+            mods {
+                self {
+                    sources sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+repositories {
+	maven {
+        name = "Curios Maven"
+        url = "https://maven.theillusivec4.top/"
+    }
+	maven {
+		name = "JEI Maven"
+		url = "https://dvs1.progwml6.com/files/maven/"
+	}
+    maven {
+        name = "tterrag"
+        url = "https://maven.tterrag.com/"
+    }
+}
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.16.4-35.0.18'
+
+    compileOnly fg.deobf("mezz.jei:jei-1.16.2:7.3.2.25:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.16.2:7.3.2.25")
+
+}
+
+jar {
+    manifest {
+        attributes([
+            "Specification-Title": "toolsharpening",
+            "Specification-Vendor": "toolsharpeningsareus",
+            "Specification-Version": "1", // We are version 1 of ourselves
+            "Implementation-Title": project.name,
+            "Implementation-Version": "${version}",
+            "Implementation-Vendor" :"toolsharpeningsareus",
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
+jar.finalizedBy('reobfJar') 
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file:///${project.projectDir}/mcmodsrepo"
+        }
+    }
+}
