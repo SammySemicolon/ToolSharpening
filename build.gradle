@@ -15,9 +15,6 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-mixin {
-    add sourceSets.main, "tool_sharpening.mixins.json"
-}
 version = "${project.minecraft}-${project.modVersion}"
 group = 'com.sammy.tool_sharpening'
 archivesBaseName = project.modId
@@ -33,7 +30,7 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
-            arg "-mixin.config="+archivesBaseName+".mixins.json"
+            arg "-mixin.config=tool_sharpening.mixins.json"
 
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
@@ -47,9 +44,8 @@ minecraft {
         }
 
         server {
-            property 'mixin.env.disableRefMap', 'true'
             workingDirectory project.file('run')
-            arg "-mixin.config="+archivesBaseName+".mixins.json"
+            arg "-mixin.config=tool_sharpening.mixins.json"
 
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
@@ -95,11 +91,10 @@ repositories {
     }
 }
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.5-36.1.31'
-
+    minecraft 'net.minecraftforge:forge:1.16.5-36.1.0'
+    annotationProcessor 'org.spongepowered:mixin:0.8.2:processor'
     compileOnly fg.deobf("mezz.jei:jei-1.16.2:7.3.2.25:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.2:7.3.2.25")
-
 }
 
 jar {
@@ -107,15 +102,18 @@ jar {
         attributes([
             "Specification-Title": "toolsharpening",
             "Specification-Vendor": "toolsharpeningsareus",
-            "Specification-Version": "1", // We are version 1 of ourselves
+            "Specification-Version": "1",
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"toolsharpeningsareus",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "MixinConfigs": "tool_sharpening.refmap.json"
         ])
     }
 }
-
+mixin {
+    add sourceSets.main, "tool_sharpening.refmap.json"
+}
 jar.finalizedBy('reobfJar') 
 
 publishing {

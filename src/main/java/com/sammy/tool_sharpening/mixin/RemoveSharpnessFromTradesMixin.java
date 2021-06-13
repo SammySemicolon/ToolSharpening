@@ -14,8 +14,7 @@ import java.util.stream.Collectors;
 @Mixin(targets = "net.minecraft.entity.merchant.villager.VillagerTrades$EnchantedBookForEmeraldsTrade")
 public class RemoveSharpnessFromTradesMixin
 {
-    @ModifyVariable(method = "getOffer", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/util/math/MathHelper;nextInt(Ljava/util/Random;II)I"))
+    @ModifyVariable(method = "getOffer", at = @At(value = "INVOKE", target = "Ljava/util/Random;nextInt(I)I"), remap = false, ordinal = 0)
     private Enchantment filter(Enchantment old)
     {
         List<Enchantment> filtered = Registry.ENCHANTMENT.stream().filter(p -> !p.equals(Enchantments.SHARPNESS)).collect(Collectors.toList());
