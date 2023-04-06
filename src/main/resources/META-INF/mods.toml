@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[33,)"
+loaderVersion="[43,)"
 license="All rights reserved"
 issueTrackerURL="https://github.com/SammySemicolon/Tool-Sharpening/issues"
 [[mods]]
@@ -11,18 +11,17 @@ logoFile="tool_sharpening.png"
 credits='''The Minecraft Modding Discord and everyone there. It's an amazing place full of a ton of amazing people, this mod wouldn't be possible without them.'''
 authors="Sammy;"
 description='''
-Tool Sharpening is a mod that replaces the sharpness enchantment!
-'''
+Tool Sharpening is a mod that replaces the sharpness enchantment!'''
 [[dependencies.tool_sharpening]]
 modId="forge"
 mandatory=true
-versionRange="[34,)"
+versionRange="[43,)"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.tool_sharpening]]
 modId="minecraft"
 mandatory=true
-versionRange="[1.16.3,1.17)"
+versionRange="[1.19.2,)"
 ordering="NONE"
 side="BOTH"

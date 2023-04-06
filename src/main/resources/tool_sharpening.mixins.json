@@ -4,9 +4,7 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "tool_sharpening.refmap.json",
   "mixins": [
-    "RemoveSharpnessFromLootMixin",
-    "RemoveSharpnessFromTradesMixin",
-    "PreventSharpnessFromBeingAppliedMixin"
+    "RemoveSharpnessMixin"
   ],
   "minVersion": "0.8"
 }

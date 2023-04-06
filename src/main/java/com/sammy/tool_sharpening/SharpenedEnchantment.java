@@ -1,32 +1,57 @@
 package com.sammy.tool_sharpening;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentType;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.CreatureAttribute;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraftforge.common.extensions.IForgeEnchantment;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-public class SharpenedEnchantment extends Enchantment
+public class SharpenedEnchantment extends Enchantment implements IForgeEnchantment
 {
-    public static EnchantmentType NONE = EnchantmentType.create(ToolSharpeningMod.MODID + ":none", i -> false);
+    public static EnchantmentCategory NONE = EnchantmentCategory.create(ToolSharpeningMod.MODID + ":none", i -> false);
     protected SharpenedEnchantment()
     {
-        super(Rarity.COMMON, NONE, new EquipmentSlotType[]{});
+        super(Rarity.COMMON, NONE, new EquipmentSlot[]{});
     }
 
     @Override
-    protected boolean canApplyTogether(Enchantment ench)
+    protected boolean checkCompatibility(Enchantment ench)
     {
         if (ench.equals(Enchantments.SHARPNESS))
         {
             return false;
         }
-        return super.canApplyTogether(ench);
+        return super.checkCompatibility(ench);
     }
 
     @Override
-    public float calcDamageByCreature(int level, CreatureAttribute creatureType)
+    public float getDamageBonus(int level, MobType creatureType, ItemStack stack)
     {
         return 3;
+    }
+
+    @Override
+    public boolean isTradeable() {
+        return false;
+    }
+
+    @Override
+    public boolean isDiscoverable() {
+        return false;
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public boolean isAllowedOnBooks() {
+        return false;
     }
 }
